@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm'; 
-import EnhancedRegisterForm from './EnhancedRegisterForm';
+import EnhancedRegisterForm from './EnhancedRegisterForm'; // optional if you use it
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,17 +15,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [showEnhancedRegister, setShowEnhancedRegister] = useState(false);
   
-  // Update mode when initialMode prop changes
   useEffect(() => {
     setMode(initialMode);
-  }, [initialMode]);
+    setShowEnhancedRegister(false);
+  }, [initialMode, isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" onClick={onClose} />
+        <div
+          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75"
+          onClick={onClose}
+        />
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -46,7 +49,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
             {mode === 'login' ? (
               <LoginForm
                 key="login"
-                onSwitchToRegister={() => setMode('register')}
+                onSwitchToRegister={() => {
+                  setMode('register');
+                  setShowEnhancedRegister(false);
+                }}
                 onClose={onClose}
               />
             ) : (
@@ -61,11 +67,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
                   <RegisterForm
                     key="register"
                     onSwitchToLogin={() => setMode('login')}
-                    onClose={() => {
-                      // Check if we should proceed to enhanced registration
-                      setShowEnhancedRegister(true);
-                      // Don't close the modal yet
-                    }}
+                    onClose={() => setShowEnhancedRegister(true)}
                   />
                 )}
               </>

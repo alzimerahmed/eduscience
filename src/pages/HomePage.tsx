@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
                 onClick={handleFreeTrial}
               >
                 onClick={handleViewPricing}
-                Start Learning Now
+                onClick={StartLearningNow}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </motion.button>
             </motion.div>
